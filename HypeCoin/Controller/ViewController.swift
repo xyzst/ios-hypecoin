@@ -14,17 +14,29 @@ class ViewController: UIViewController {
     @IBOutlet weak var currency: UILabel!
     @IBOutlet weak var toCurrency: UIPickerView!
     
-    let coinManager = CoinManager()
+    var coinManager = CoinManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        coinManager.delegate = self
         toCurrency.dataSource = self
         toCurrency.delegate = self
     }
 }
 
-// MARK: - UIPickerViewDataSource
-extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+// MARK: - UIPickerViewDataSource, UIPickerViewDelegate, CoinManagerDelegate
+extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate, CoinManagerDelegate { // ?? extract to file ??
+    func didFailWith(error: Error) {
+        print(error) // ?? ux decision: display some type of error to user ??
+    }
+    
+    func didUpdateWith(data: CoinData) {
+        DispatchQueue.main.async {
+            self.bitcoin.text = data.rate.toString()
+            self.currency.text = data.asset_id_quote
+        }
+    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1 // # of columns
     }
