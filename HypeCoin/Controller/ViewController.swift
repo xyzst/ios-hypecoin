@@ -25,7 +25,7 @@ class ViewController: UIViewController {
 }
 
 // MARK: - UIPickerViewDataSource, UIPickerViewDelegate, CoinManagerDelegate
-extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate, CoinManagerDelegate { // ?? extract to file ??
+extension ViewController: CoinManagerDelegate { // ?? extract to file ??
     func didFailWith(error: Error) {
         print(error) // ?? ux decision: display some type of error to user ??
     }
@@ -36,11 +36,15 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate, CoinMana
             self.currency.text = data.asset_id_quote
         }
     }
-    
+}
+
+extension ViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1 // # of columns
     }
-    
+}
+
+extension ViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return coinManager.currencies.count // # of rows
     }
@@ -50,7 +54,7 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate, CoinMana
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        coinManager.getPrice(for: coinManager.getCurrency(nth: row))
+        coinManager.getPrice(for: coinManager.getCurrency(nth: row)) // for each update in the view picker, send the currently selected value to coin manager to find current rate
     }
 }
 
