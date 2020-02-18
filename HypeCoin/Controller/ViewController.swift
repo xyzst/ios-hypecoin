@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     }
 }
 
-// MARK: - UIPickerViewDataSource, UIPickerViewDelegate, CoinManagerDelegate
+// MARK: - CoinManagerDelegate
 extension ViewController: CoinManagerDelegate { // ?? extract to file ??
     func didFailWith(error: Error) {
         print(error) // ?? ux decision: display some type of error to user ??
@@ -38,12 +38,14 @@ extension ViewController: CoinManagerDelegate { // ?? extract to file ??
     }
 }
 
+// MARK: - UIPickerViewDataSource
 extension ViewController: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1 // # of columns
     }
 }
 
+// MARK: - UIPickerViewDelegate
 extension ViewController: UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return coinManager.currencies.count // # of rows
